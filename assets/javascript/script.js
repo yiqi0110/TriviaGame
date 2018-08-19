@@ -3,6 +3,7 @@
 $('#questionSection').hide();
 $('#rightAnswerIntermission').hide();
 $('#wrongAnswerIntermission').hide();
+$('#lossPage').hide();
 $('#resultPage').hide();
 
 // Contemplating having a function for randomized questions...
@@ -27,9 +28,7 @@ var genjiClanQ = {
     a1: "The Uramaki clan",
     a2: "The Oda clan",
     a3: "The Mitsubishi clan",
-    answer: {
-        a: "The Shimada clan",
-    }
+    answer: "The Shimada clan",
 };
 var savedGenjiQ = {
     question: "Who saved Genji after his assassination attempt?",
@@ -155,17 +154,12 @@ var questionObjects = function (questionNumber) {
     var test = test;
     var x = questionNumber;
     var questionShuffle = [x.a1, x.a2, x.a3, x.answer]
-    shuffle(questionShuffle);
+    var shuffledArr = shuffle(questionShuffle);
     $('#questionSection').show();
     $('strong#questionSpan').text(x.question);
-    $('button#answer0').text(shuffle(questionShuffle[0]));
-    console.log('1232');
-    $('button#answer1').text(shuffle(questionShuffle[1]));
-    console.log('1545');
-    $('button#answer2').text(shuffle(questionShuffle[2]));
-    console.log('1656');
-    $('button#answer3').text(shuffle(questionShuffle[3]));
-    console.log('1989');
+    for (var i = 0; i < 4; i++) {
+        $('button#answer' + i).text(shuffledArr[i]);
+    }
 };
 
 $('button').on('click', function (event) {
@@ -215,14 +209,20 @@ $('button').on('click', function (event) {
 var rightAnswerIntermission = function () {
     $('#questionSection').hide();
     $('#rightAnswerIntermission').show();
-    interval4Intermission = setTimeout(startGame(), 5000);
+    interval4Intermission = setTimeout(function () {
+        startGame();
+    }, 3500);
 };
 
 // wrong intermission function
 var wrongAnswerIntermission = function (question) {
     var x = question;
     $('#questionSection').hide();
-    $('#wrongAnswerIntermission').text("Sorry the right answer was " + x.answer + "!").show();
+    $('#causeText').text("Sorry the right answer was " + x.answer + "!");
+    $('#wrongAnswerIntermission').show();
+    interval4Intermission = setTimeout(function () {
+        startGame();
+    }, 3500);
 };
 
 
