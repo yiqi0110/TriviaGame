@@ -16,10 +16,11 @@ $('.jumbotron').fadeIn(3000, function () {
 // set global variables
 var roundsWon = 0;
 var roundsLost = 0;
+var roundsPlayed = 0;
 var interval4RoundTime;
-var interval4GameTime;
 var interval4Intermission;
 var questionObjectsArray = [];
+var setTime = 30;
 
 // creating all the objects for each question
 // I was going to have it put into the array initially but I think it'll be cleaner looking code this way, and since it's not a big file it shouldn't cause any latancy issues.
@@ -48,7 +49,7 @@ var creationOWQ = {
     question: "Why was OverWatch created?",
     a1: "To solve world hunger",
     a2: "To stop WW2",
-    a3: "To organize heros from around the world",
+    a3: "To have a party",
     answer: "To combat the omnic crisis"
 };
 var soilder76NameQ = {
@@ -67,10 +68,10 @@ var mercyNameQ = {
 };
 var specOpsUnitQ = {
     question: "What covert special operations unit was Gabriel Reyes given charge of after the omnic crisis?",
-    a1: "Black Special Operation Unit",
-    a2: "Reaper Special Operation Unit",
-    a3: "Misfits Special Operation Unit",
-    answer: "Black Watch Special Operation Unit"
+    a1: "Black Special Operation",
+    a2: "Reaper Special Operation",
+    a3: "Misfits Special Operation",
+    answer: "BlackWatch Special Operation"
 };
 var hardlightQ = {
     question: "What country created Hardlight?",
@@ -94,6 +95,7 @@ var subject28Q = {
     a3: "subject 10033",
     answer: "subject 28"
 };
+
 
 // Pushing all question objects to an array
 questionObjectsArray.push(genjiClanQ, savedGenjiQ, omnicStandardQ, creationOWQ, soilder76NameQ, mercyNameQ, specOpsUnitQ, hardlightQ, gamer2PlayerQ, subject28Q);
@@ -128,7 +130,6 @@ var reset = function () {
     var roundsWon = 0;
     var roundsLost = 0;
     var interval4RoundTime;
-    var interval4GameTime;
     var interval4Intermission;
     var questionObjectsArray = [];
 };
@@ -136,6 +137,14 @@ var reset = function () {
 
 // create a startGame function
 var startGame = function () {
+    interval4RoundTime = setInterval(function () {
+        $("#display").text("Time left: " + setTime)
+        setTime--;
+        console.log(setTime);
+    }, 100);
+    if (setTime === 0){
+        stopTimer();
+    }
     $('#startScreen').hide();
     $('#rightAnswerIntermission').hide();
     $('#wrongAnswerIntermission').hide();
@@ -150,8 +159,6 @@ $('#startGame').click(function () {
 
 // create a function that runs through the question objects while filling in a question into the question argument
 var questionObjects = function (questionNumber) {
-    // should shuffle which one is the answer using the shuffle function
-    var test = test;
     var x = questionNumber;
     var questionShuffle = [x.a1, x.a2, x.a3, x.answer]
     var shuffledArr = shuffle(questionShuffle);
@@ -162,43 +169,40 @@ var questionObjects = function (questionNumber) {
     }
 };
 
-$('button').on('click', function (event) {
+var stopTimer = function(){
+    clearInterval(interval4Intermission);
+}
+
+$('button').on("click", function (event) {
     event.preventDefault();
+    clearInterval(interval4RoundTime);
+    console.log('this');
     var userInput = $(this).text();
     console.log(userInput);
     for (var i = 0; i < questionObjectsArray.length; i++) {
         if (userInput == questionObjectsArray[0].answer) {
-            console.log('this');
+            roundsWon++;
+            roundsPlayed++;
             questionObjectsArray.shift();
             rightAnswerIntermission();
-            console.log(questionObjectsArray);
+            // Create if statement to bring game to conclusion at 10 questions
+            if (roundsPlayed == 10) {
+                console.log("this");
+                determineWinner();
+            };
             return true;
         } else {
-            console.log('that');
+            roundsLost++;
+            roundsPlayed++;
             wrongAnswerIntermission(questionObjectsArray[0]);
             questionObjectsArray.shift();
-            console.log(questionObjectsArray);
+            // Create if statement to bring game to conclusion at 10 questions
+            if (roundsPlayed == 10) {
+                console.log("this");
+                determineWinner();
+            };
             return false;
         }
-        // if ($(a).text() == trivia[n].correct) {
-        //     $(".game").hide();
-        //     $(".timer").hide();
-        //     $(".rightanswer").show();
-        //     n++;
-        //     if (n > 4) {
-        //         hideall();
-        //         $(".win").show();
-        //         $(".volts").text(v);
-        //         $(".retake").show();
-        //     } else {
-        //         fill(trivia[n]);
-        //     }
-        // } else {
-        //     $(".game").hide();
-        //     $(".timer").hide();
-        //     $(".wronganswer").show();
-        //     v++;
-        // };
     }
 });
 
@@ -212,6 +216,8 @@ var rightAnswerIntermission = function () {
     interval4Intermission = setTimeout(function () {
         startGame();
     }, 3500);
+    console.log(roundsWon + "this is the wins");
+    console.log(roundsPlayed);
 };
 
 // wrong intermission function
@@ -222,45 +228,23 @@ var wrongAnswerIntermission = function (question) {
     $('#wrongAnswerIntermission').show();
     interval4Intermission = setTimeout(function () {
         startGame();
-    }, 3500);
+    }, 2000);
+    console.log(roundsLost + "this is the loses");
+    console.log(roundsPlayed);
 };
 
-
-// Create a function the assosiates the answer with one of the coice answers
-var assosiationAnswer = function (questionObjectsArray, val) {
-    for (var i = 0; i < questionObjectsArray.length; i++) {
-        for (var value in questionObjectsArray[i]) {
-            if (questionObjectsArray[i][value] == val) {
-                console.log(value + i);
-                questionObjects(questionObjectsArray[i]);
-                // then run function for right answer
-                return;
-            }
-        }
+// determines the winner
+var determineWinner = function () {
+    $('#questionSection').hide();
+    $('#rightAnswerIntermission').hide();
+    $('#wrongAnswerIntermission').hide();
+    if (roundsWon > roundsLost) {
+        $('#resultPage').show();
+    } else {
+        $('#lossPage').show();
     }
-    return false;
+    $('.resultId').text("The results of the match . . .");
+    $('.winsId').text("Rounds won: " + roundsWon);
+    $('.losesId').text("Sombra's score: " + roundsLost);
+
 };
-// assosiationAnswer(questionObjectsArray, 'subject 28');
-
-// create a function for right clicks on the 'question page'
-
-// Tim Lewis [6:27 PM]      Code to think about for right answer stuff
-// if ($(a).text() == trivia[n].correct) {
-//     $(".game").hide();
-//     $(".timer").hide();
-//     $(".rightanswer").show();
-//     n++;
-//     if (n > 4) {
-//         hideall();
-//         $(".win").show();
-//         $(".volts").text(v);
-//         $(".retake").show();
-//     } else {
-//         fill(trivia[n]);
-//     }
-// } else {
-//     $(".game").hide();
-//     $(".timer").hide();
-//     $(".wronganswer").show();
-//     v++;
-// };

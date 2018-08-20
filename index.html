@@ -25,8 +25,7 @@
             <h1 class="display-4">Welcome to Overwatch's unoffical trivia site!</h1>
             <p class="lead">
                 <span>
-                    <strong>You'll have 5 minutes before Sombra hacks this site and deletes all its info. There will be 10 rounds
-                        in this match! You have to get more right then her in order to win! Good luck!</strong>
+                    <strong>In order to defy Sombra's hack, you must score higher than her! Good Luck!</strong>
                 </span>
             </p>
             <a id="startGame" class="btn btn-secondary btn-lg btn-block" role="button">
@@ -35,59 +34,60 @@
         </section>
         <!-- question filler -->
         <section id="questionSection">
+            <div id="display"></div>
             <p class="lead">
                 <span>
                     <strong id="questionSpan">#</strong>
                 </span>
             </p>
-            <button id="answer0" class="btn btn-secondary btn-lg btn-block" role="button">
+            <button id="answer0" class="btn btn-secondary btn-lg btn-block" role="button" onclick="stopTimer()">
             </button>
-            <button id="answer1" class="btn btn-secondary btn-lg btn-block" role="button">
+            <button id="answer1" class="btn btn-secondary btn-lg btn-block" role="button" onclick="stopTimer()">
             </button>
-            <button id="answer2" class="btn btn-secondary btn-lg btn-block" role="button">
+            <button id="answer2" class="btn btn-secondary btn-lg btn-block" role="button" onclick="stopTimer()">
             </button>
-            <button id="answer3" class="btn btn-secondary btn-lg btn-block" role="button">
+            <button id="answer3" class="btn btn-secondary btn-lg btn-block" role="button" onclick="stopTimer()">
             </button>
         </section>
         <!-- to what ckan does Genji belong to?; shimada/ who saved genji after his assassination attempt?;mercy/ what was the omnic's standard soiler during the omnic crisis?; bastion/ why was overwatch created?; to combat the omnic crisis/ what is soilder 76's real name?; jack morrison/ who is angela ziegler?; mercy/ what covert special operations unit was gabriel reyes given charge of after the omnic crisis?;blackwatch/ what country created hardlight?; india/ what is the name of the game that made DVA a perfect candidate for the meka program in south korea?; starcraft/ what is subject 28's name?; winston-->
         <section id="rightAnswerIntermission">
             <h1 class="display-4">Correct!</h1>
-            <p class="lead">
-                <span>
-                    <strong>You are on step closer to beating Sombra!</strong>
-                </span>
-            </p>
-            <img src="https://media.giphy.com/media/rCWWa7xpE9Kik/giphy-downsized.gif" alt="RightAnswer">
+            <img class="gifS" src="https://media.giphy.com/media/rCWWa7xpE9Kik/giphy-downsized.gif" alt="RightAnswer">
         </section>
         <section id="wrongAnswerIntermission">
             <h1 class="display-4">Wrong!</h1>
-            <p class="lead">
-                <span>
-                    <strong id="causeText">#</strong>
-                </span>
-            </p>
-            <img src="https://media.giphy.com/media/uCxkcTEeFoGZ2/giphy-downsized.gif" alt="WrongAnswer">
+            <img class="gifS" src="https://media.giphy.com/media/3oz8xCxj4400yvfgDm/giphy-downsized.gif" alt="WrongAnswer">
         </section>
         <section id="resultPage">
-            <h1 class="display-4">Results. . .</h1>
             <p class="lead">
-                <span>
-                    <strong>#</strong>
-                </span>
+                <div class="row">
+                    <strong class="resultId">#</strong>
+                </div>
+                <div class="row">
+                    <strong class="winsId">#</strong>
+                </div>
+                <div class="row">
+                    <strong class="losesId">#</strong>
+                </div>
             </p>
-            <img src="https://media.giphy.com/media/sf39kJ4EyIdiM/giphy-downsized.gif" alt="Correct">
+            <img src="https://media.giphy.com/media/4q4W6Az9ehZS0/giphy-downsized-large.gif" alt="Correct">
         </section>
 
         <section id="lossPage">
-            <h1>Result</h1>
-            <br>
-            <strong>
-                <p class="results"></p>
-            </strong>
-            <img src="https://media.giphy.com/media/HaRSNIBWEwglG/giphy-downsized.gif" alt="lossPage">
+            <p class="lead">
+                <div class="row">
+                    <strong class="resultId">#</strong>
+                </div>
+                <div class="row">
+                    <strong class="winsId">#</strong>
+                </div>
+                <div class="row">
+                    <strong class="losesId">#</strong>
+                </div>
+            </p>
+            <img src="https://media.giphy.com/media/HaRSNIBWEwglG/giphy-downsized-large.gif" alt="lossPage">
         </section>
     </div>
-
 
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
