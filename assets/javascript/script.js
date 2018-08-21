@@ -19,6 +19,7 @@ var roundsLost = 0;
 var interval4RoundTime;
 var interval4Intermission;
 var questionObjectsArray = [];
+var clockRunning = false;
 var setTime = 30;
 
 // creating all the objects for each question
@@ -132,6 +133,7 @@ var reset = function () {
     roundsLost = 0;
     interval4RoundTime;
     interval4Intermission;
+    clockRunning = false;
     pushObjects();
     shuffle(questionObjectsArray);
     $('#questionSection').hide();
@@ -150,26 +152,28 @@ var resetTimer = function () {
 
 // create a startGame function
 var startGame = function () {
-    resetTimer();
-    interval4RoundTime = setInterval(function () {
-        $("#display").text("Time left: " + setTime)
-        setTime--;
-        if (setTime === 0) {
-            clearInterval(interval4RoundTime);
-            roundsLost++;
-            if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
-                determineWinner();
-                console.log('this is for the end of the game');
-            } else {
-                wrongAnswerIntermission(questionObjectsArray[0]);
-                questionObjectsArray.shift();
-                console.log('that is for if dont answer in time');
-            }
-        }
-    }, 500);
     $('#startScreen').hide();
     $('#rightAnswerIntermission').hide();
     $('#wrongAnswerIntermission').hide();
+    resetTimer();
+    if (!clockRunning) {
+        interval4RoundTime = setInterval(function () {
+            $("#display").text("Time left: " + setTime)
+            setTime--;
+            if (setTime === 0) {
+                clearInterval(interval4RoundTime);
+                roundsLost++;
+                if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
+                    determineWinner();
+                    console.log('this is for the end of the game');
+                } else {
+                    wrongAnswerIntermission(questionObjectsArray[0]);
+                    questionObjectsArray.shift();
+                    console.log('that is for if dont answer in time');
+                }
+            }
+        }, 500);
+    };
     questionObjects(questionObjectsArray[0]);
 };
 // console.log(indexInUse);
@@ -204,7 +208,10 @@ $('button').on("click", function (event) {
         // Create if statement to bring game to conclusion at 10 questions
         if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
             determineWinner();
-        };
+            console.log('game over');
+        }
+        console.log('correct choice');
+
 
     } else {
         clearInterval(interval4RoundTime);
@@ -214,7 +221,9 @@ $('button').on("click", function (event) {
         // Create if statement to bring game to conclusion at 10 questions
         if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
             determineWinner();
+            console.log('testing 1 2 3');
         };
+        console.log('game continue');
         console.log(roundsLost, roundsWon)
 
     }
