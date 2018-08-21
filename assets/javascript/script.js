@@ -16,6 +16,7 @@ $('.jumbotron').fadeIn(3000, function () {
 // set global variables
 var roundsWon = 0;
 var roundsLost = 0;
+var roundsPlayed = 0;
 var interval4RoundTime;
 var interval4Intermission;
 var questionObjectsArray = [];
@@ -130,6 +131,7 @@ shuffle(questionObjectsArray);
 var reset = function () {
     roundsWon = 0;
     roundsLost = 0;
+    roundsPlayed = 0;
     interval4RoundTime;
     interval4Intermission;
     pushObjects();
@@ -150,6 +152,7 @@ var resetTimer = function () {
 
 // create a startGame function
 var startGame = function () {
+    console.log(roundsPlayed);
     $('#startScreen').hide();
     $('#rightAnswerIntermission').hide();
     $('#wrongAnswerIntermission').hide();
@@ -161,6 +164,7 @@ var startGame = function () {
         if (setTime === 0) {
             clearInterval(interval4RoundTime);
             roundsLost++;
+            roundsPlayed++;
             if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
                 determineWinner();
                 console.log('this is for the end of the game');
@@ -206,6 +210,7 @@ $('button').on("click", function (event) {
             console.log('game over');
         } else {
             roundsWon++;
+            roundsPlayed++;
             questionObjectsArray.shift();
             rightAnswerIntermission();
             // Create if statement to bring game to conclusion at 10 questions
@@ -219,6 +224,7 @@ $('button').on("click", function (event) {
             console.log('testing 1 2 3');
         } else {
             roundsLost++;
+            roundsPlayed++;
             wrongAnswerIntermission(questionObjectsArray[0]);
             questionObjectsArray.shift();
             // Create if statement to bring game to conclusion at 10 questions
@@ -237,7 +243,7 @@ var rightAnswerIntermission = function () {
     $('#rightAnswerIntermission').show();
     resetTimer();
     console.log(questionObjectsArray);
-    if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
+    if (roundsPlayed === 10) {
         determineWinner();
         console.log('this is for the end of the game');
     } else {
@@ -256,7 +262,7 @@ var wrongAnswerIntermission = function (question) {
     $('#wrongAnswerIntermission').show();
     resetTimer();
     console.log(questionObjectsArray);
-    if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
+    if (roundsPlayed === 10) {
         determineWinner();
         console.log('this is for the end of the game');
     } else {
