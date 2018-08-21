@@ -166,7 +166,7 @@ var startGame = function () {
                 console.log('that');
             }
         }
-    }, 5);
+    }, 500);
     $('#startScreen').hide();
     $('#rightAnswerIntermission').hide();
     $('#wrongAnswerIntermission').hide();
@@ -229,7 +229,7 @@ var rightAnswerIntermission = function () {
     resetTimer();
     interval4Intermission = setTimeout(function () {
         startGame();
-    }, 35);
+    }, 3500);
     console.log(roundsWon + " this is the wins");
 };
 
@@ -242,7 +242,7 @@ var wrongAnswerIntermission = function (question) {
     resetTimer();
     interval4Intermission = setTimeout(function () {
         startGame();
-    }, 20);
+    }, 2000);
     console.log(roundsLost + " this is the loses");
 };
 
