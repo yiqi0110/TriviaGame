@@ -19,7 +19,6 @@ var roundsLost = 0;
 var interval4RoundTime;
 var interval4Intermission;
 var questionObjectsArray = [];
-var clockRunning = false;
 var setTime = 30;
 
 // creating all the objects for each question
@@ -133,7 +132,6 @@ var reset = function () {
     roundsLost = 0;
     interval4RoundTime;
     interval4Intermission;
-    clockRunning = false;
     pushObjects();
     shuffle(questionObjectsArray);
     $('#questionSection').hide();
@@ -156,27 +154,27 @@ var startGame = function () {
     $('#rightAnswerIntermission').hide();
     $('#wrongAnswerIntermission').hide();
     resetTimer();
-    if (!clockRunning) {
-        interval4RoundTime = setInterval(function () {
-            $("#display").text("Time left: " + setTime)
-            setTime--;
-            console.log('setTime');
-            if (setTime === 0) {
-                clearInterval(interval4RoundTime);
-                roundsLost++;
-                if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
-                    determineWinner();
-                    console.log('this is for the end of the game');
-                } else {
-                    wrongAnswerIntermission(questionObjectsArray[0]);
-                    questionObjectsArray.shift();
-                    console.log('that is for if dont answer in time');
-                }
+    interval4RoundTime = setInterval(function () {
+        $("#display").text("Time left: " + setTime)
+        setTime--;
+        console.log('setTime');
+        if (setTime === 0) {
+            clearInterval(interval4RoundTime);
+            roundsLost++;
+            if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
+                determineWinner();
+                console.log('this is for the end of the game');
+            } else {
+                wrongAnswerIntermission(questionObjectsArray[0]);
+                questionObjectsArray.shift();
+                console.log('that is for if dont answer in time');
             }
-        }, 500);
-    };
+        }
+    }, 1000);
+
     questionObjects(questionObjectsArray[0]);
 };
+console.log(questionObjectsArray);
 // console.log(indexInUse);
 
 // click function to 'start game'
@@ -203,30 +201,30 @@ $('button').on("click", function (event) {
     var userInput = $(this).text();
     if (userInput === questionObjectsArray[0].answer) {
         clearInterval(interval4RoundTime);
-        roundsWon++;
-        questionObjectsArray.shift();
-        rightAnswerIntermission();
-        // Create if statement to bring game to conclusion at 10 questions
         if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
             determineWinner();
             console.log('game over');
+        } else {
+            roundsWon++;
+            questionObjectsArray.shift();
+            rightAnswerIntermission();
+            // Create if statement to bring game to conclusion at 10 questions
+            console.log('correct choice');
+
         }
-        console.log('correct choice');
-
-
     } else {
         clearInterval(interval4RoundTime);
-        roundsLost++;
-        wrongAnswerIntermission(questionObjectsArray[0]);
-        questionObjectsArray.shift();
-        // Create if statement to bring game to conclusion at 10 questions
         if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
             determineWinner();
             console.log('testing 1 2 3');
-        };
-        console.log('game continue');
-        console.log(roundsLost, roundsWon)
-
+        } else {
+            roundsLost++;
+            wrongAnswerIntermission(questionObjectsArray[0]);
+            questionObjectsArray.shift();
+            // Create if statement to bring game to conclusion at 10 questions
+            console.log('game continue');
+            console.log(roundsLost, roundsWon)
+        }
     }
 });
 
@@ -238,10 +236,16 @@ var rightAnswerIntermission = function () {
     $('#questionSection').hide();
     $('#rightAnswerIntermission').show();
     resetTimer();
-    interval4Intermission = setTimeout(function () {
-        startGame();
-    }, 3500);
-    console.log(roundsWon + " this is the wins");
+    console.log(questionObjectsArray);
+    if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
+        determineWinner();
+        console.log('this is for the end of the game');
+    } else {
+        interval4Intermission = setTimeout(function () {
+            startGame();
+        }, 3500);
+        console.log(roundsWon + " this is the wins");
+    }
 };
 
 // wrong intermission function
@@ -251,10 +255,16 @@ var wrongAnswerIntermission = function (question) {
     $('#causeText').text("Sorry the right answer was " + x.answer + "!");
     $('#wrongAnswerIntermission').show();
     resetTimer();
-    interval4Intermission = setTimeout(function () {
-        startGame();
-    }, 2000);
-    console.log(roundsLost + " this is the loses");
+    console.log(questionObjectsArray);
+    if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
+        determineWinner();
+        console.log('this is for the end of the game');
+    } else {
+        interval4Intermission = setTimeout(function () {
+            startGame();
+        }, 2000);
+        console.log(roundsLost + " this is the loses");
+    };
 };
 
 // determines the winner
