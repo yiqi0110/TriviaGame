@@ -16,7 +16,6 @@ $('.jumbotron').fadeIn(3000, function () {
 // set global variables
 var roundsWon = 0;
 var roundsLost = 0;
-var roundsPlayed = 0;
 var interval4RoundTime;
 var interval4Intermission;
 var questionObjectsArray = [];
@@ -98,8 +97,10 @@ var subject28Q = {
 
 
 // Pushing all question objects to an array
-questionObjectsArray.push(genjiClanQ, savedGenjiQ, omnicStandardQ, creationOWQ, soilder76NameQ, mercyNameQ, specOpsUnitQ, hardlightQ, gamer2PlayerQ, subject28Q);
-console.log(questionObjectsArray);
+var pushObjects = function () {
+    questionObjectsArray.push(genjiClanQ, savedGenjiQ, omnicStandardQ, creationOWQ, soilder76NameQ, mercyNameQ, specOpsUnitQ, hardlightQ, gamer2PlayerQ, subject28Q);
+};
+pushObjects();
 
 // I am using this function from the internet
 function shuffle(array) {
@@ -127,24 +128,45 @@ shuffle(questionObjectsArray);
 
 // create a reset function
 var reset = function () {
-    var roundsWon = 0;
-    var roundsLost = 0;
-    var interval4RoundTime;
-    var interval4Intermission;
-    var questionObjectsArray = [];
+    roundsWon = 0;
+    roundsLost = 0;
+    interval4RoundTime;
+    interval4Intermission;
+    pushObjects();
+    shuffle(questionObjectsArray);
+    $('#questionSection').hide();
+    $('#rightAnswerIntermission').hide();
+    $('#wrongAnswerIntermission').hide();
+    $('#lossPage').hide();
+    $('#resultPage').hide();
+    $('#startScreen').show();
+};
+
+// reset the timer
+var resetTimer = function () {
+    setTime = 30;
 };
 
 
 // create a startGame function
 var startGame = function () {
+    resetTimer();
     interval4RoundTime = setInterval(function () {
         $("#display").text("Time left: " + setTime)
         setTime--;
-        console.log(setTime);
-    }, 100);
-    if (setTime === 0){
-        stopTimer();
-    }
+        if (setTime === 0) {
+            clearInterval(interval4RoundTime);
+            roundsLost++;
+            if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
+                determineWinner();
+                console.log('this');
+            } else {
+                wrongAnswerIntermission(questionObjectsArray[0]);
+                questionObjectsArray.shift();
+                console.log('that');
+            }
+        }
+    }, 500);
     $('#startScreen').hide();
     $('#rightAnswerIntermission').hide();
     $('#wrongAnswerIntermission').hide();
@@ -169,36 +191,29 @@ var questionObjects = function (questionNumber) {
     }
 };
 
-var stopTimer = function(){
-    clearInterval(interval4Intermission);
-}
 
 $('button').on("click", function (event) {
     event.preventDefault();
     clearInterval(interval4RoundTime);
-    console.log('this');
     var userInput = $(this).text();
-    console.log(userInput);
     for (var i = 0; i < questionObjectsArray.length; i++) {
         if (userInput == questionObjectsArray[0].answer) {
             roundsWon++;
-            roundsPlayed++;
             questionObjectsArray.shift();
             rightAnswerIntermission();
             // Create if statement to bring game to conclusion at 10 questions
-            if (roundsPlayed == 10) {
-                console.log("this");
+            if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
+                setTime=-1;
                 determineWinner();
             };
             return true;
         } else {
             roundsLost++;
-            roundsPlayed++;
             wrongAnswerIntermission(questionObjectsArray[0]);
             questionObjectsArray.shift();
             // Create if statement to bring game to conclusion at 10 questions
-            if (roundsPlayed == 10) {
-                console.log("this");
+            if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
+                setTime=-1;
                 determineWinner();
             };
             return false;
@@ -213,11 +228,11 @@ $('button').on("click", function (event) {
 var rightAnswerIntermission = function () {
     $('#questionSection').hide();
     $('#rightAnswerIntermission').show();
+    resetTimer();
     interval4Intermission = setTimeout(function () {
         startGame();
     }, 3500);
-    console.log(roundsWon + "this is the wins");
-    console.log(roundsPlayed);
+    console.log(roundsWon + " this is the wins");
 };
 
 // wrong intermission function
@@ -226,11 +241,11 @@ var wrongAnswerIntermission = function (question) {
     $('#questionSection').hide();
     $('#causeText').text("Sorry the right answer was " + x.answer + "!");
     $('#wrongAnswerIntermission').show();
+    resetTimer();
     interval4Intermission = setTimeout(function () {
         startGame();
     }, 2000);
-    console.log(roundsLost + "this is the loses");
-    console.log(roundsPlayed);
+    console.log(roundsLost + " this is the loses");
 };
 
 // determines the winner
@@ -238,6 +253,8 @@ var determineWinner = function () {
     $('#questionSection').hide();
     $('#rightAnswerIntermission').hide();
     $('#wrongAnswerIntermission').hide();
+    clearInterval(interval4RoundTime);
+    console.log('this');
     if (roundsWon > roundsLost) {
         $('#resultPage').show();
     } else {
