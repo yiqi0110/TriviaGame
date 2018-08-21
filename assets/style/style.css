@@ -1,4 +1,5 @@
 /* Trivia css */
+
 * {
     color: #f08a38;
 }
@@ -27,13 +28,8 @@ body {
     width: 60%;
 }
 
-.endGif {
-    width: 100%;
-}
-
-
-
 /* media queries */
+
 @media only screen and (max-width:1200px) {
     body {
         background-image: url('../images/mediaQueryBackground.png');
@@ -41,8 +37,11 @@ body {
         background-repeat: repeat;
         background-position: center;
     }
-
     .gifS {
+        width: 100%;
+    }
+    
+    .endGif {
         width: 100%;
     }
 }

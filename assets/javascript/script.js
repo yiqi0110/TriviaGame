@@ -254,6 +254,7 @@ var determineWinner = function () {
     $('#rightAnswerIntermission').hide();
     $('#wrongAnswerIntermission').hide();
     clearInterval(interval4RoundTime);
+    console.log(setTime);
     console.log('this');
     if (roundsWon > roundsLost) {
         $('#resultPage').show();
