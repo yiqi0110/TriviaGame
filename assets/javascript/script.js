@@ -166,7 +166,7 @@ var startGame = function () {
                 console.log('that');
             }
         }
-    }, 500);
+    }, 5);
     $('#startScreen').hide();
     $('#rightAnswerIntermission').hide();
     $('#wrongAnswerIntermission').hide();
@@ -203,20 +203,18 @@ $('button').on("click", function (event) {
             rightAnswerIntermission();
             // Create if statement to bring game to conclusion at 10 questions
             if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
-                setTime=-1;
                 determineWinner();
             };
-            return true;
+
         } else {
             roundsLost++;
             wrongAnswerIntermission(questionObjectsArray[0]);
             questionObjectsArray.shift();
             // Create if statement to bring game to conclusion at 10 questions
             if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
-                setTime=-1;
                 determineWinner();
             };
-            return false;
+
         }
     }
 });
@@ -231,7 +229,7 @@ var rightAnswerIntermission = function () {
     resetTimer();
     interval4Intermission = setTimeout(function () {
         startGame();
-    }, 3500);
+    }, 35);
     console.log(roundsWon + " this is the wins");
 };
 
@@ -244,7 +242,7 @@ var wrongAnswerIntermission = function (question) {
     resetTimer();
     interval4Intermission = setTimeout(function () {
         startGame();
-    }, 2000);
+    }, 20);
     console.log(roundsLost + " this is the loses");
 };
 
