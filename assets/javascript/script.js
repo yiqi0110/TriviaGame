@@ -160,6 +160,7 @@ var startGame = function () {
         interval4RoundTime = setInterval(function () {
             $("#display").text("Time left: " + setTime)
             setTime--;
+            console.log('setTime');
             if (setTime === 0) {
                 clearInterval(interval4RoundTime);
                 roundsLost++;
