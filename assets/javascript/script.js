@@ -159,11 +159,11 @@ var startGame = function () {
             roundsLost++;
             if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
                 determineWinner();
-                console.log('this');
+                console.log('this is for the end of the game');
             } else {
                 wrongAnswerIntermission(questionObjectsArray[0]);
                 questionObjectsArray.shift();
-                console.log('that');
+                console.log('that is for if dont answer in time');
             }
         }
     }, 500);
@@ -196,26 +196,27 @@ $('button').on("click", function (event) {
     event.preventDefault();
     clearInterval(interval4RoundTime);
     var userInput = $(this).text();
-    for (var i = 0; i < questionObjectsArray.length; i++) {
-        if (userInput == questionObjectsArray[0].answer) {
-            roundsWon++;
-            questionObjectsArray.shift();
-            rightAnswerIntermission();
-            // Create if statement to bring game to conclusion at 10 questions
-            if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
-                determineWinner();
-            };
+    if (userInput === questionObjectsArray[0].answer) {
+        clearInterval(interval4RoundTime);
+        roundsWon++;
+        questionObjectsArray.shift();
+        rightAnswerIntermission();
+        // Create if statement to bring game to conclusion at 10 questions
+        if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
+            determineWinner();
+        };
 
-        } else {
-            roundsLost++;
-            wrongAnswerIntermission(questionObjectsArray[0]);
-            questionObjectsArray.shift();
-            // Create if statement to bring game to conclusion at 10 questions
-            if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
-                determineWinner();
-            };
+    } else {
+        clearInterval(interval4RoundTime);
+        roundsLost++;
+        wrongAnswerIntermission(questionObjectsArray[0]);
+        questionObjectsArray.shift();
+        // Create if statement to bring game to conclusion at 10 questions
+        if (Array.isArray(questionObjectsArray) && questionObjectsArray.length === 0) {
+            determineWinner();
+        };
+        console.log(roundsLost, roundsWon)
 
-        }
     }
 });
 
