@@ -1,2 +1,4 @@
-# TriviaGame
-this is a trivia game about Overwatch lore
+Trivia Game based in the Overwatch world
+======
+
+> A simple game that uses setInterval and timeouts.
